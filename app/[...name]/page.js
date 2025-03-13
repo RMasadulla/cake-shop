@@ -1,12 +1,25 @@
-import Footer from "@/components/Footer";
-import { SaveIcon, ShareIcon } from "@/components/Icons";
-import NormalHeader from "@/components/NormalHeader";
+"use client";
+
 import useData from "@/hooks/useData";
-import formatDate from "@/utils/formatDate";
-import { getCategoryNameById } from "@/utils/getCategoryNameById";
 import titleReplace from "@/utils/titleReplace";
 import Image from "next/image";
+
+import {
+  ChevronRight,
+  Heart,
+  Minus,
+  Plus,
+  ShoppingCart,
+  Star,
+} from "lucide-react";
+
+import RelatedProductCard from "@/components/card/RelatedProductCard";
+import ReviewSection from "@/components/ReviewSection";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function BlogDetailsPage({ params: { name } }) {
   const { recipesData, categoriesData } = useData();
@@ -25,143 +38,210 @@ export default function BlogDetailsPage({ params: { name } }) {
     (recipe) => recipe?.category_id === categoryId
   );
 
+  // new add
+  const [quantity, setQuantity] = useState(1);
+  const [activeImage, setActiveImage] = useState(0);
+
+  const product = {
+    name: "Chocolate Celebration Cake",
+    price: 49.99,
+    rating: 4.8,
+    reviewCount: 124,
+    description:
+      "A delicious chocolate cake with layers of rich ganache and chocolate buttercream frosting. Perfect for birthdays, anniversaries, or any special occasion.",
+    details: {
+      ingredients:
+        "Flour, Sugar, Cocoa Powder, Eggs, Butter, Milk, Vanilla Extract, Baking Powder, Salt",
+      weight: "2.5 kg",
+      serves: "12-16 people",
+      allergens: "Contains: Wheat, Eggs, Milk, May contain traces of nuts",
+    },
+    images: [
+      "/placeholder.svg?height=600&width=600",
+      "/placeholder.svg?height=600&width=600",
+      "/placeholder.svg?height=600&width=600",
+      "/placeholder.svg?height=600&width=600",
+    ],
+  };
+
+  const incrementQuantity = () => {
+    setQuantity((prev) => prev + 1);
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity((prev) => prev - 1);
+    }
+  };
+
   return (
-    <div class="bg-white text-gray-800">
-      <NormalHeader />
-      <main class="container mx-auto px-4 py-8">
-        <article>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            {details?.title}
-          </h1>
-          <div className="flex items-center space-x-4 mb-6">
+    <main className="container mx-auto px-4 mt-[100px]">
+      <div className="flex items-center text-sm text-muted-foreground mb-6">
+        <Link href="/" className="hover:text-primary">
+          Home
+        </Link>
+        <ChevronRight className="h-4 w-4 mx-2" />
+        <Link
+          href={`/${details?.category_id}/recipes`}
+          className="hover:text-primary"
+        >
+          {name[0]}
+        </Link>
+        <ChevronRight className="h-4 w-4 mx-2" />
+        <span className="text-foreground">{details?.title}</span>
+      </div>
+      <div className="grid md:grid-cols-2 gap-8 mb-16">
+        {/* Product Images */}
+        <div className="space-y-4">
+          <div className="border rounded-lg overflow-hidden">
             <Image
-              src="/avater.png"
-              alt={details?.author}
-              className="w-8 h-8 rounded-full"
-              width={1368}
-              height={768}
+              src={`/thumbs/${details?.thumbnail}`}
+              alt={details?.title}
+              width={600}
+              height={600}
+              className="w-full h-auto object-cover"
             />
-            <span className="text-gray-600">{details?.author}</span>
-            <span className="text-gray-400">|</span>
-            <span className="text-gray-600">
-              {time} {unit?.replace("minutes", "mins")}{" "}
-            </span>
-            <span className="text-gray-400">|</span>
-            <span className="text-gray-600">
-              {formatDate(details?.published_date)}
-            </span>
           </div>
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex space-x-4">
-              <button className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-full">
-                <ShareIcon />
-                Share
+          <div className="flex gap-4 overflow-x-auto pb-2">
+            {product.images.map((image, index) => (
+              <button
+                key={index}
+                className={`border rounded-md overflow-hidden flex-shrink-0 ${
+                  activeImage === index ? "ring-2 ring-primary" : ""
+                }`}
+                onClick={() => setActiveImage(index)}
+              >
+                <Image
+                  src={`/thumbs/${details?.thumbnail}` || "/placeholder.svg"}
+                  alt={`${details?.title} thumbnail ${index + 1}`}
+                  width={100}
+                  height={100}
+                  className="w-20 h-20 object-cover"
+                />
               </button>
-              <button className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-full">
-                <SaveIcon />
-                Save
-              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Product Info */}
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-3xl font-bold">{details?.title}</h1>
+            <div className="flex items-center mt-2">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-5 h-5 ${
+                      i < Math.floor(details?.rating?.average_rating)
+                        ? "fill-primary text-primary"
+                        : "fill-muted text-muted-foreground"
+                    }`}
+                  />
+                ))}
+              </div>
+              <span className="ml-2 text-sm text-muted-foreground">
+                {details?.rating?.average_rating} (
+                {details?.rating?.rating_count} reviews)
+              </span>
             </div>
           </div>
-          <Image
-            src="/single-banner.jpg"
-            alt="Cooking Image"
-            className="w-full h-auto mb-8 rounded-lg"
-            width={1770}
-            height={1180}
-          />
-          <p className="text-gray-600 mb-8">
-            One thing I learned living in the Catskills section of Brooklyn, NY
-            was how to cook a good Italian meal. Here is a recipe I created
-            after having this dish in a restaurant. Enjoy!
-          </p>
 
-          <h2 className="text-3xl font-bold mb-4">Before you begin</h2>
-          <p className="mb-8">
-            Food qualities braise chicken cuts bowl through slices butternut
-            snack. Tender meat juicy dinners. One-pot low heat plenty of time
-            adobo fat raw soften fruit. sweet renders bone-in marrow richness
-            kitchen, fricassee basted putter.
-          </p>
+          <div className="text-3xl font-bold">${product.price.toFixed(2)}</div>
 
-          <h2 className="text-3xl font-bold mb-4">Here are the basics</h2>
-          <p className="mb-8">
-            Juicy meatballs brisket slammin' baked shoulder. Juicy smoker soy
-            sauce burgers brisket. polenta mustard hunk greens. Wine technique
-            snack skewers chuck excess. Oil heat slowly. slices natural
-            delicious, set aside magic tbsp skillet, bay leaves brown
-            centerpiece. fruit soften edges frond slices onion snack pork steem
-            on wines excess technique cup; Cover smoker soy sauce.
-          </p>
+          <p className="text-muted-foreground">{details?.description}</p>
 
-          <blockquote className="text-3xl font-bold italic text-center my-12 px-4">
-            "One cannot think well, love well, sleep well, if one has not dined
-            well."
-          </blockquote>
-          <p className="text-center text-gray-600 mb-12">
-            — Virginia Woolf, A Room of One's Own
-          </p>
+          <Separator />
 
-          <h2 className="text-3xl font-bold mb-4">In the kitchen</h2>
-          <p className="mb-8">
-            Gastronomy atmosphere set aside. Slice butternut cooking home.
-            Delicious romantic undisturbed raw platter will meld. Thick Skewers
-            skillet natural, smoker soy sauce wait roux. slices rosette bone-in
-            simmer. Romantic fall-off-the-bone butternut chuck under romas,
-            Skewers on culinary experience.
-          </p>
+          <div className="space-y-4">
+            <div className="flex items-center">
+              <span className="font-medium mr-4">Quantity:</span>
+              <div className="flex items-center border rounded-md">
+                <button
+                  onClick={decrementQuantity}
+                  className="p-2 hover:bg-muted"
+                  disabled={quantity <= 1}
+                >
+                  <Minus className="h-4 w-4" />
+                </button>
+                <span className="px-4">{quantity}</span>
+                <button
+                  onClick={incrementQuantity}
+                  className="p-2 hover:bg-muted"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
 
-          <Image
-            src={`/thumbs/${details?.thumbnail}`}
-            alt="Cooking in kitchen"
-            className="w-full h-auto mb-8 rounded-lg max-w-xl mx-auto"
-            width={1770}
-            height={1180}
-          />
-
-          <p className="mb-8">
-            Juicy meatballs brisket slammin' baked shoulder. Juicy smoker soy
-            sauce burgers brisket. polenta mustard hunk greens. Wine technique
-            snack skewers chuck excess. Oil heat slowly. slices natural
-            delicious, set aside magic tbsp skillet, bay leaves brown
-            centerpiece. fruit soften edges frond slices onion snack pork steem
-            on wines excess technique cup; Cover smoker soy sauce.
-          </p>
-        </article>
-
-        <section className="my-12">
-          <h2 className="text-3xl font-bold mb-8">You might also like</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {CategoryBasedRecipe &&
-              CategoryBasedRecipe.sort(
-                (a, b) => b.rating.rating_count - a.rating.rating_count
-              )
-                .slice(0, 4)
-                .map((recipe) => {
-                  return (
-                    <Link
-                      key={recipe?.title}
-                      href={`/${getCategoryNameById(
-                        recipe?.category_id
-                      )}/${titleReplace(recipe?.title)}`}
-                    >
-                      <div>
-                        <Image
-                          src={`/thumbs/${recipe?.thumbnail}`}
-                          alt={recipe?.title}
-                          className="w-full h-60 object-cover rounded-lg mb-2"
-                          width={1971}
-                          height={1068}
-                        />
-                        <h3 className="font-semibold">{recipe?.title}</h3>
-                      </div>
-                    </Link>
-                  );
-                })}
+            <div className="flex flex-wrap gap-4">
+              <Button className="flex-1" size="lg">
+                <ShoppingCart className="mr-2 h-5 w-5" />
+                Add to Cart
+              </Button>
+              <Button variant="outline" size="lg">
+                <Heart className="mr-2 h-5 w-5" />
+                Add to Wishlist
+              </Button>
+            </div>
           </div>
-        </section>
-      </main>
-      <Footer />
-    </div>
+
+          <Separator />
+
+          <Tabs defaultValue="description">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="description">Description</TabsTrigger>
+              <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
+              <TabsTrigger value="details">Details</TabsTrigger>
+            </TabsList>
+            <TabsContent value="description" className="pt-4">
+              <p>{product.description}</p>
+              <p className="mt-4">
+                This cake is made with the finest ingredients and baked fresh to
+                order. It's perfect for any celebration or special occasion.
+              </p>
+            </TabsContent>
+            <TabsContent value="ingredients" className="pt-4">
+              <p className="font-medium">Ingredients:</p>
+              <p className="mt-2">{product.details.ingredients}</p>
+              <p className="mt-4 font-medium">Allergens:</p>
+              <p className="mt-2">{product.details.allergens}</p>
+            </TabsContent>
+            <TabsContent value="details" className="pt-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="font-medium">Weight:</p>
+                  <p>{product.details.weight}</p>
+                </div>
+                <div>
+                  <p className="font-medium">Serves:</p>
+                  <p>{product.details.serves}</p>
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
+
+      {/* Review Section */}
+      <ReviewSection productId="chocolate-cake" />
+
+      {/* Related Products */}
+      <section className="my-12">
+        <h2 className="text-3xl font-bold mb-8">You might also like</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {CategoryBasedRecipe &&
+            CategoryBasedRecipe.sort(
+              (a, b) => b.rating.rating_count - a.rating.rating_count
+            )
+              .slice(0, 4)
+              .map((recipe) => {
+                return (
+                  <RelatedProductCard key={recipe?.title} recipe={recipe} />
+                );
+              })}
+        </div>
+      </section>
+    </main>
   );
 }

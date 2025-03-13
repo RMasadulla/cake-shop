@@ -1,14 +1,15 @@
-import Image from "next/image";
+import Link from "next/link";
+
 export default function Logo() {
   return (
-    <a href="/" className="text-3xl font-bold">
-      <Image
-        src="/lws-kitchen.png"
-        className="h-10"
-        height={100}
-        width={100}
-        alt="logo"
-      />
-    </a>
+    <Link
+      href="/"
+      className="font-bold text-3xl text-black hover:text-gray-950"
+    >
+      S B B
+      <span className="text-sm ml-1 hidden md:inline-flex ">
+        Sweet Bliss Bakery
+      </span>
+    </Link>
   );
 }

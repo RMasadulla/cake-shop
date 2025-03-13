@@ -4,9 +4,7 @@ import Image from "next/image";
 import HandPickedCollectionCard from "@/components/card/HandPickedCollectionCard";
 import LatestRecipeCard from "@/components/card/LatestRecipeCard";
 import PopularCategoriesCard from "@/components/card/PopularCategoriesCard";
-import Footer from "@/components/Footer";
 import WeeklyRecipeDeliveryForm from "@/components/form/WeeklyRecipeDeliveryForm";
-import Header from "@/components/Header";
 import useData from "@/hooks/useData";
 import { getCategoryNameById } from "@/utils/getCategoryNameById";
 import titleReplace from "@/utils/titleReplace";
@@ -34,125 +32,119 @@ export default function Home() {
   });
 
   return (
-    <div className="bg-white">
-      <Header />
-      <main className="container mx-auto px-4 mt-[100px]">
-        <section className="mb-16 bg-orange-50">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <Image
-                src={`/thumbs/${randomRecipe?.thumbnail}`}
-                alt={randomRecipe?.title}
-                className="w-full h-[450px] object-cover rounded-lg"
-                width={1368}
-                height={768}
-              />
-            </div>
-            <div>
-              <h1 className="text-4xl font-bold mb-4">{randomRecipe?.title}</h1>
-              <p className="text-gray-600 mb-4 line-clamp-3">
-                {randomRecipe?.description}
-              </p>
-              <Link
-                href={`/${getCategoryNameById(
-                  randomRecipe?.category_id
-                )}/${titleReplace(randomRecipe?.title)}`}
-                className="bg-orange-500 text-white px-6 py-2 rounded-full inline-block hover:bg-orange-600"
-              >
-                View Recipe
-              </Link>
-            </div>
+    <main className="container mx-auto px-4 mt-[100px]">
+      <section className="mb-16 bg-orange-50">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <Image
+              src={`/thumbs/${randomRecipe?.thumbnail}`}
+              alt={randomRecipe?.title}
+              className="w-full h-[450px] object-cover rounded-lg"
+              width={1368}
+              height={768}
+            />
           </div>
-        </section>
-        <section className="mb-16" id="super_delicious">
-          <h2 className="text-3xl font-bold mb-8">Super Delicious</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {sortedRecipes &&
-              sortedRecipes.slice(0, 3).map((recipe) => (
+          <div>
+            <h1 className="text-4xl font-bold mb-4">{randomRecipe?.title}</h1>
+            <p className="text-gray-600 mb-4 line-clamp-3">
+              {randomRecipe?.description}
+            </p>
+            <Link
+              href={`/${getCategoryNameById(
+                randomRecipe?.category_id
+              )}/${titleReplace(randomRecipe?.title)}`}
+              className="bg-orange-500 text-white px-6 py-2 rounded-full inline-block hover:bg-orange-600"
+            >
+              View Recipe
+            </Link>
+          </div>
+        </div>
+      </section>
+      <section className="mb-16" id="super_delicious">
+        <h2 className="text-3xl font-bold mb-8">Super Delicious</h2>
+        <div className="grid md:grid-cols-3 gap-8">
+          {sortedRecipes &&
+            sortedRecipes.slice(0, 3).map((recipe) => (
+              <Link
+                key={recipe?.category_id}
+                href={`/${getCategoryNameById(
+                  recipe?.category_id
+                )}/${titleReplace(recipe?.title)}`}
+              >
+                {" "}
+                <SuperDeliciousCard recipe={recipe} />
+              </Link>
+            ))}
+        </div>
+      </section>
+      <section className="mb-16">
+        <div className="flex justify-between items-top">
+          <h2 className="text-3xl font-bold mb-8">Popular Categories</h2>
+          <Link href="/categories" className="text-orange-500">
+            View All
+          </Link>
+        </div>
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+          {popularCategory
+            .sort((a, b) => b.recipeCount - a.recipeCount)
+            .slice(0, 6)
+            .map((categoryItem) => (
+              <PopularCategoriesCard
+                key={categoryItem?.name}
+                category={categoryItem}
+              />
+            ))}
+        </div>
+      </section>
+      <section className="mb-16 bg-orange-100 p-8 rounded-lg overflow-hidden">
+        <h2 className="text-3xl font-bold mb-4">Deliciousness to your inbox</h2>
+        <p className="text-gray-600 mb-4">
+          Enjoy weekly hand picked recipes and recommendations
+        </p>
+        <WeeklyRecipeDeliveryForm />
+      </section>
+      <section id="HandPicked" className="mb-16">
+        <h2 className="text-3xl font-bold mb-8 animate-fade-in-down">
+          Hand-Picked Collections
+        </h2>
+        <div className="grid md:grid-cols-2 gap-8">
+          {recipesData &&
+            [...recipesData]
+              .sort(() => Math.random() - 0.5)
+              .slice(0, 2)
+              .map((recipe) => (
+                <HandPickedCollectionCard
+                  key={recipe?.title}
+                  collection={recipe}
+                />
+              ))}
+        </div>
+      </section>
+      <section id="latest-recipes" className="mb-16">
+        <h2 className="text-3xl font-bold mb-8">Latest Recipes</h2>
+        <div className="grid md:grid-cols-4 gap-8">
+          {recipesData &&
+            [...recipesData]
+              .sort(
+                (a, b) =>
+                  new Date(b.published_date) - new Date(a.published_date)
+              )
+              .slice(0, 4)
+              .map((recipe) => (
                 <Link
-                  key={recipe?.category_id}
+                  key={recipe.title}
                   href={`/${getCategoryNameById(
                     recipe?.category_id
                   )}/${titleReplace(recipe?.title)}`}
                 >
-                  {" "}
-                  <SuperDeliciousCard recipe={recipe} />
+                  <LatestRecipeCard
+                    recipe={recipe}
+                    categories={categoriesData}
+                  />
                 </Link>
               ))}
-          </div>
-        </section>
-        <section className="mb-16">
-          <div className="flex justify-between items-top">
-            <h2 className="text-3xl font-bold mb-8">Popular Categories</h2>
-            <Link href="/categories" className="text-orange-500">
-              View All
-            </Link>
-          </div>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-            {popularCategory
-              .sort((a, b) => b.recipeCount - a.recipeCount)
-              .slice(0, 6)
-              .map((categoryItem) => (
-                <PopularCategoriesCard
-                  key={categoryItem?.name}
-                  category={categoryItem}
-                />
-              ))}
-          </div>
-        </section>
-        <section className="mb-16 bg-orange-100 p-8 rounded-lg overflow-hidden">
-          <h2 className="text-3xl font-bold mb-4">
-            Deliciousness to your inbox
-          </h2>
-          <p className="text-gray-600 mb-4">
-            Enjoy weekly hand picked recipes and recommendations
-          </p>
-          <WeeklyRecipeDeliveryForm />
-        </section>
-        <section id="HandPicked" className="mb-16">
-          <h2 className="text-3xl font-bold mb-8 animate-fade-in-down">
-            Hand-Picked Collections
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {recipesData &&
-              [...recipesData]
-                .sort(() => Math.random() - 0.5)
-                .slice(0, 2)
-                .map((recipe) => (
-                  <HandPickedCollectionCard
-                    key={recipe?.title}
-                    collection={recipe}
-                  />
-                ))}
-          </div>
-        </section>
-        <section id="latest-recipes" className="mb-16">
-          <h2 className="text-3xl font-bold mb-8">Latest Recipes</h2>
-          <div className="grid md:grid-cols-4 gap-8">
-            {recipesData &&
-              [...recipesData]
-                .sort(
-                  (a, b) =>
-                    new Date(b.published_date) - new Date(a.published_date)
-                )
-                .slice(0, 4)
-                .map((recipe) => (
-                  <Link
-                    key={recipe.title}
-                    href={`/${getCategoryNameById(
-                      recipe?.category_id
-                    )}/${titleReplace(recipe?.title)}`}
-                  >
-                    <LatestRecipeCard
-                      recipe={recipe}
-                      categories={categoriesData}
-                    />
-                  </Link>
-                ))}
-          </div>
-        </section>
-      </main>
-      <Footer />
-    </div>
+        </div>
+      </section>
+    </main>
   );
 }

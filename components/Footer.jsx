@@ -14,7 +14,7 @@ export default function Footer() {
             </p>
           </div>
           <div>
-            <h4 className="font-semibold mb-4">LWS Kitchen</h4>
+            <h4 className="font-semibold mb-4">SBB Bakery</h4>
             <ul className="space-y-2">
               <li>
                 <Link href="#" className="text-gray-600 hover:text-orange-500">
