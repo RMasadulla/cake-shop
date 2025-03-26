@@ -38,6 +38,13 @@
   transform-origin: 70% 70%;
 }
 
+/* slider */
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* ---break---*/
 
 @layer base {

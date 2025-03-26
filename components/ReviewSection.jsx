@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import Ratings from "./ui/Ratings";
 
-export default function ReviewSection({ productId }) {
+export default function ReviewSection({ productId, details }) {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
 
@@ -33,23 +34,12 @@ export default function ReviewSection({ productId }) {
       <div className="bg-muted/50 p-6 rounded-lg mb-8">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="text-center">
-            <div className="text-4xl font-bold">4.7</div>
+            <div className="text-4xl font-bold">{details?.average_rating}</div>
             <div className="flex justify-center mt-2">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-5 h-5 ${
-                    i < 4
-                      ? "fill-primary text-primary"
-                      : i === 4
-                      ? "fill-primary text-primary opacity-70"
-                      : "fill-muted text-muted-foreground"
-                  }`}
-                />
-              ))}
+              <Ratings rating={details?.average_rating} />
             </div>
             <div className="text-sm text-muted-foreground mt-1">
-              Based on {reviews.length} reviews
+              Based on {details?.rating_count} reviews
             </div>
           </div>
 

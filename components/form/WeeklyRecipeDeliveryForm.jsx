@@ -4,11 +4,11 @@ export default function WeeklyRecipeDeliveryForm() {
       <input
         type="email"
         placeholder="Email Address"
-        className="flex-grow px-4 py-2 rounded-full"
+        className="flex-grow px-4 py-2 rounded-full outline-none ring-1 ring-transparent focus:ring-black"
       />
       <button
         type="submit"
-        className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600"
+        className="bg-gray-900 text-white px-6 py-2 rounded-full hover:bg-gray-900"
       >
         Join
       </button>

@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import Link from "next/link";
 import Logo from "../Logo";
 import Cart from "./Cart";
@@ -5,9 +6,11 @@ import MobileNav from "./MobileNav";
 import SearchBar from "./SearchBar";
 import UserProfile from "./UserProfile";
 
-export default function Header() {
+export default async function Header() {
+  const session = await auth();
+
   return (
-    <header className="w-full mx-auto px-8 py-4 shadow-lg fixed top-0 bg-white z-50">
+    <header className="w-full mx-auto px-8 py-4 shadow-lg sticky top-0 bg-white z-50">
       <MobileNav />
       <nav className="flex gap-2 justify-between items-center">
         <h1>
@@ -25,20 +28,20 @@ export default function Header() {
             </Link>
           </li>
           <li>
-            <Link href="/#latest-recipes" className="hover:text-orange-500">
+            <Link href="/#trending-Cakes" className="hover:text-orange-500">
               Popular
             </Link>
           </li>
           <li>
-            <Link href="/#latest-recipes" className="hover:text-orange-500">
-              New Items
+            <Link href="/#Special-Offers" className="hover:text-orange-500">
+              Offers
             </Link>
           </li>
         </ul>
         <div className=" flex items-center justify-end space-x-8 ">
           <SearchBar />
           <Cart />
-          <UserProfile />
+          <UserProfile user={session?.user} />
         </div>
       </nav>
     </header>

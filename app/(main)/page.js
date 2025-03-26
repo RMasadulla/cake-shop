@@ -1,10 +1,11 @@
-import SuperDeliciousCard from "@/components/card/SuperDeliciousCard";
 import Image from "next/image";
 
 import HandPickedCollectionCard from "@/components/card/HandPickedCollectionCard";
 import LatestRecipeCard from "@/components/card/LatestRecipeCard";
-import PopularCategoriesCard from "@/components/card/PopularCategoriesCard";
+import TrendingCakeCard from "@/components/card/TrendingCakeCard";
 import WeeklyRecipeDeliveryForm from "@/components/form/WeeklyRecipeDeliveryForm";
+import CagegorySlider from "@/components/slider/CagegorySlider";
+import BtnCustom from "@/components/ui/BtnCustom";
 import useData from "@/hooks/useData";
 import { getCategoryNameById } from "@/utils/getCategoryNameById";
 import titleReplace from "@/utils/titleReplace";
@@ -32,7 +33,7 @@ export default function Home() {
   });
 
   return (
-    <main className="container mx-auto px-4 mt-[100px]">
+    <main className="container mx-auto px-4 mt-10">
       <section className="mb-16 bg-orange-50">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
@@ -49,60 +50,51 @@ export default function Home() {
             <p className="text-gray-600 mb-4 line-clamp-3">
               {randomRecipe?.description}
             </p>
-            <Link
+            <BtnCustom
               href={`/${getCategoryNameById(
                 randomRecipe?.category_id
               )}/${titleReplace(randomRecipe?.title)}`}
-              className="bg-orange-500 text-white px-6 py-2 rounded-full inline-block hover:bg-orange-600"
             >
-              View Recipe
-            </Link>
+              View Details
+            </BtnCustom>
           </div>
         </div>
       </section>
-      <section className="mb-16" id="super_delicious">
-        <h2 className="text-3xl font-bold mb-8">Super Delicious</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {sortedRecipes &&
-            sortedRecipes.slice(0, 3).map((recipe) => (
-              <Link
-                key={recipe?.category_id}
-                href={`/${getCategoryNameById(
-                  recipe?.category_id
-                )}/${titleReplace(recipe?.title)}`}
-              >
-                {" "}
-                <SuperDeliciousCard recipe={recipe} />
-              </Link>
-            ))}
-        </div>
-      </section>
+
       <section className="mb-16">
         <div className="flex justify-between items-top">
           <h2 className="text-3xl font-bold mb-8">Popular Categories</h2>
-          <Link href="/categories" className="text-orange-500">
+          <Link href="/categories" className="text-gray-600">
             View All
           </Link>
         </div>
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-          {popularCategory
-            .sort((a, b) => b.recipeCount - a.recipeCount)
-            .slice(0, 6)
-            .map((categoryItem) => (
-              <PopularCategoriesCard
-                key={categoryItem?.name}
-                category={categoryItem}
-              />
-            ))}
+        <CagegorySlider popularCategory={popularCategory} />
+      </section>
+
+      <section id="trending-Cakes" className="mb-16 lg:pt-20">
+        <h2 className="text-3xl font-bold mb-8">Trending Cakes</h2>
+        <div className="grid md:grid-cols-3 gap-8">
+          {sortedRecipes &&
+            sortedRecipes
+              .slice(0, 3)
+              .map((recipe) => (
+                <TrendingCakeCard key={recipe?.category_id} recipe={recipe} />
+              ))}
         </div>
       </section>
+
       <section className="mb-16 bg-orange-100 p-8 rounded-lg overflow-hidden">
-        <h2 className="text-3xl font-bold mb-4">Deliciousness to your inbox</h2>
+        <h2 className="text-3xl font-bold mb-4">
+          Freshly Baked Happiness, Just for You!
+        </h2>
         <p className="text-gray-600 mb-4">
-          Enjoy weekly hand picked recipes and recommendations
+          Get weekly slices of sweetness, special offers, and cake inspirations
+          straight to your inbox!
         </p>
+
         <WeeklyRecipeDeliveryForm />
       </section>
+
       <section id="HandPicked" className="mb-16">
         <h2 className="text-3xl font-bold mb-8 animate-fade-in-down">
           Hand-Picked Collections
@@ -120,8 +112,8 @@ export default function Home() {
               ))}
         </div>
       </section>
-      <section id="latest-recipes" className="mb-16">
-        <h2 className="text-3xl font-bold mb-8">Latest Recipes</h2>
+      <section id="Special-Offers" className="mb-16 lg:pt-20">
+        <h2 className="text-3xl font-bold mb-8">Special Offers</h2>
         <div className="grid md:grid-cols-4 gap-8">
           {recipesData &&
             [...recipesData]
@@ -131,17 +123,11 @@ export default function Home() {
               )
               .slice(0, 4)
               .map((recipe) => (
-                <Link
+                <LatestRecipeCard
                   key={recipe.title}
-                  href={`/${getCategoryNameById(
-                    recipe?.category_id
-                  )}/${titleReplace(recipe?.title)}`}
-                >
-                  <LatestRecipeCard
-                    recipe={recipe}
-                    categories={categoriesData}
-                  />
-                </Link>
+                  recipe={recipe}
+                  categories={categoriesData}
+                />
               ))}
         </div>
       </section>

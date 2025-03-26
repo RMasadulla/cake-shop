@@ -1,5 +1,4 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/header/Header";
+import RootProvider from "@/providers/RootProvider";
 import "./globals.css";
 
 export const metadata = {
@@ -9,11 +8,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body class="bg-white text-gray-900">
-        <Header />
-        {children}
-        <Footer />
+    <html lang="en" className="scroll-smooth">
+      <body className="bg-white text-gray-900">
+        <RootProvider>{children}</RootProvider>
       </body>
     </html>
   );
