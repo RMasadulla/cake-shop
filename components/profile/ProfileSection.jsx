@@ -96,7 +96,6 @@ export default function ProfileSection({ user }) {
             <div className="mt-2 flex items-center">
               <span className="h-12 w-12 overflow-hidden rounded-full bg-gray-100">
                 <Image
-                  className="h-24 w-24 rounded-full mb-2"
                   src={user?.image ? user?.image : "/user.png"}
                   alt={user ? user?.name : "Profile"}
                   width={100}
