@@ -2,72 +2,72 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SignOut from "../auth/SignOut";
 
 export default function UserProfile({ user }) {
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef();
 
-  const toggleProfile = () => {
-    setIsProfileOpen(!isProfileOpen);
-  };
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <>
-      {/* User Profile Image (Round Shape) */}
-      <div
-        className="cursor-pointer relative group w-16"
-        onClick={toggleProfile}
-      >
-        <Image
-          src={user?.image ? user?.image : "/user.png"}
-          alt={user ? user?.name : "Profile"}
-          className="wave-animation w-10 h-10 rounded-full border-2 border-black shadow-lg"
-          width={100}
-          height={100}
-        />
-      </div>
+    <div className="relative" ref={dropdownRef}>
+      <Image
+        src={user?.image || "/user.png"}
+        alt={user?.name || "User"}
+        className="w-10 h-10 rounded-full border-2 border-black cursor-pointer"
+        width={40}
+        height={40}
+        onClick={() => setOpen((prev) => !prev)}
+      />
 
-      {/* User Details (Slide-In Panel) */}
       <div
-        className={`absolute top-full right-0 bg-white p-4 z-10 shadow-md border-t-2 border-black transition-transform duration-100 ease-in-out ${
-          isProfileOpen
-            ? "translate-y-0 opacity-100"
-            : "translate-y-full opacity-0"
+        className={`absolute right-0 mt-2 w-48 bg-white border border-gray-200 shadow-md rounded-md p-3 transition-all duration-200 z-50 ${
+          open
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 pointer-events-none -translate-y-2"
         }`}
-        style={{ width: "200px" }}
       >
         {user ? (
-          <div className="flex flex-col">
-            <p className="text-xl font-bold text-gray-800 mb-3">{user?.name}</p>
+          <>
+            <p className="font-semibold mb-2">{user.name}</p>
             <Link
-              href={"/profile"}
-              onClick={toggleProfile}
-              className=" mb-1 font-semibold text-black hover:text-white hover:bg-black px-3 py-2 rounded-sm"
+              href="/profile"
+              onClick={() => setOpen(false)}
+              className="block mb-1 text-sm hover:bg-black hover:text-white px-3 py-1 rounded"
             >
               Profile
             </Link>
-            <SignOut customStyle="mb-1 bg-black font-semibold text-white hover:text-gray-200 px-3 py-2 rounded-sm" />
-          </div>
+            <SignOut customStyle="block w-full text-left text-sm bg-black text-white hover:bg-gray-800 px-3 py-1 rounded" />
+          </>
         ) : (
-          <div className="flex flex-col">
+          <>
             <Link
-              href={"/login"}
-              onClick={toggleProfile}
-              className=" mb-1 bg-black font-semibold text-white hover:text-gray-200 px-3 py-2 rounded-sm"
+              href="/login"
+              onClick={() => setOpen(false)}
+              className="block text-sm bg-black text-white hover:bg-gray-800 px-3 py-1 rounded mb-1"
             >
               Login
             </Link>
             <Link
-              href={"/register"}
-              onClick={toggleProfile}
-              className="font-semibold text-black hover:text-white hover:bg-black px-3 py-2 rounded-sm  transition-all"
+              href="/register"
+              onClick={() => setOpen(false)}
+              className="block text-sm text-black hover:bg-black hover:text-white px-3 py-1 rounded"
             >
               Register
             </Link>
-          </div>
+          </>
         )}
       </div>
-    </>
+    </div>
   );
 }

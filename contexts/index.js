@@ -1,3 +1,9 @@
+//contexts/index.js
 import { createContext } from "react";
 
-export const AuthContext = createContext("");
+const AuthContext = createContext("");
+
+const SidebarContext = createContext(undefined);
+const ThemeContext = createContext(undefined);
+
+export { AuthContext, SidebarContext, ThemeContext };

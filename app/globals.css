@@ -113,3 +113,102 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* for dashboard  */
+@layer components {
+  .menu-item {
+    @apply relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium;
+  }
+
+  .menu-item-active {
+    @apply bg-gray-50 text-blue-500 dark:bg-gray-500/10 dark:text-blue-400;
+  }
+
+  .menu-item-inactive {
+    @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
+  }
+
+  .menu-item-icon {
+    @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400;
+  }
+
+  .menu-item-icon-active {
+    @apply text-blue-500 dark:text-blue-400;
+  }
+
+  .menu-item-icon-inactive {
+    @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+  }
+
+  .menu-item-arrow {
+    @apply relative;
+  }
+
+  .menu-item-arrow-active {
+    @apply rotate-180 text-blue-500 dark:text-blue-400;
+  }
+
+  .menu-item-arrow-inactive {
+    @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+  }
+
+  .menu-dropdown-item {
+    @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium;
+  }
+
+  .menu-dropdown-item-active {
+    @apply bg-gray-50 text-blue-500 dark:bg-gray-500/10 dark:text-blue-400;
+  }
+
+  .menu-dropdown-item-inactive {
+    @apply text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5;
+  }
+
+  .menu-dropdown-badge {
+    @apply block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase text-blue-500 dark:text-blue-400;
+  }
+
+  .menu-dropdown-badge-active {
+    @apply bg-gray-100 dark:bg-gray-500/20;
+  }
+
+  .menu-dropdown-badge-inactive {
+    @apply bg-gray-50 group-hover:bg-gray-100 dark:bg-gray-500/15 dark:group-hover:bg-gray-500/20;
+  }
+
+  .no-scrollbar {
+    /* Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .custom-scrollbar {
+    &::-webkit-scrollbar {
+      @apply h-1.5 w-1.5;
+    }
+
+    &::-webkit-scrollbar-track {
+      @apply rounded-full;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      @apply rounded-full bg-gray-200 dark:bg-gray-700;
+    }
+  }
+
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #344054;
+  }
+
+  /* For Remove Date Icon */
+  input[type="date"]::-webkit-inner-spin-button,
+  input[type="time"]::-webkit-inner-spin-button,
+  input[type="date"]::-webkit-calendar-picker-indicator,
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+  }
+}

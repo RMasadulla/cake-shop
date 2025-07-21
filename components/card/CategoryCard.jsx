@@ -14,7 +14,7 @@ export default function CategoryCard({ category }) {
           />
         </div>
       </Link>
-      <h2 className="text-xl font-semibold">{category.name}</h2>{" "}
+      <h2 className="text-xl font-semibold">{category.name}</h2>
     </div>
   );
 }

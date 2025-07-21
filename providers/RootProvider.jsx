@@ -2,6 +2,7 @@
 
 import store from "@/redux/app/store";
 import { getTotals } from "@/redux/features/cart/cartSlice";
+
 import { useEffect } from "react";
 import { Provider, useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";

@@ -1,43 +1,40 @@
 import mongoose, { Schema } from "mongoose";
 
-// User Schema
 const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Name is required"],
       trim: true,
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "Email is required"],
       unique: true,
-      trim: true,
       lowercase: true,
-      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format"],
+      match: [/\S+@\S+\.\S+/, "Invalid email format"],
     },
     password: {
       type: String,
-      required: true,
-      minlength: 6,
+      required: [true, "Password is required"],
+      minlength: [6, "Password must be at least 6 characters"],
     },
     phone: {
       type: String,
-      default: "01983000000",
       validate: {
         validator: (value) => /^\d{11}$/.test(value),
         message: "Invalid phone number",
       },
+      default: "01983000000",
     },
     image: {
       type: String,
       default: "",
     },
-    userPosition: {
+    position: {
       type: String,
-      required: true,
-      enum: ["general", "editor", "admin"],
-      default: "general",
+      enum: ["customer", "assistant", "admin"],
+      default: "customer",
     },
   },
   { timestamps: true }

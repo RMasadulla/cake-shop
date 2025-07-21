@@ -14,7 +14,7 @@ const SearchBar = () => {
 
   return (
     <div>
-      <form onSubmit={handleSearch} className="w-full flex items-center">
+      <form onSubmit={handleSearch} className=" w-full flex items-center">
         <input
           type="text"
           placeholder="Search..."
@@ -29,21 +29,6 @@ const SearchBar = () => {
           <SearchIcon />
         </button>
       </form>
-      {/* <form onSubmit={handleSearch} className="w-full flex items-center">
-      <input
-        type="text"
-        placeholder="Search..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="w-full px-4 py-2 border  border-gray-300 rounded-l-md outline-none focus:border-black transition-colors"
-      />
-      <button
-        type="submit"
-        className="px-2 py-[.5rem] bg-black text-white rounded-r-md hover:bg-black"
-      >
-        <SearchIcon />
-      </button>
-    </form> */}
     </div>
   );
 };

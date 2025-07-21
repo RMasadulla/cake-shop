@@ -11,7 +11,7 @@ export const metadata = {
 export default async function AuthLayout({ children }) {
   await dbConnect();
   return (
-    <div id="main-layout">
+    <div id="auth-layout" className="bg-white text-gray-900">
       <Header />
       {children}
       <Footer />

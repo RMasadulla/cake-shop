@@ -10,13 +10,16 @@ export default async function Header() {
   const session = await auth();
 
   return (
-    <header className="w-full mx-auto px-8 py-4 shadow-lg sticky top-0 bg-white z-50">
-      <MobileNav />
-      <nav className="flex gap-2 justify-between items-center">
-        <h1>
-          <Logo />
-        </h1>
-        <ul className="hidden flex-1 lg:flex justify-center space-x-6 ">
+    <header className="w-full px-4 sm:px-6 lg:px-8 py-4 shadow-lg sticky top-0 bg-white z-50">
+      <nav className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <MobileNav />
+          <Link href="/">
+            <Logo />
+          </Link>
+        </div>
+
+        <ul className="hidden lg:flex flex-1 justify-center space-x-6 text-sm font-medium">
           <li>
             <Link href="/" className="hover:text-orange-500">
               Home
@@ -38,12 +41,18 @@ export default async function Header() {
             </Link>
           </li>
         </ul>
-        <div className=" flex items-center justify-end space-x-8 ">
-          <SearchBar />
+
+        <div className="flex items-center gap-4">
+          <div className="hidden md:block">
+            <SearchBar />
+          </div>
           <Cart />
           <UserProfile user={session?.user} />
         </div>
       </nav>
+      <div className="mt-4 block md:hidden">
+        <SearchBar />
+      </div>
     </header>
   );
 }
